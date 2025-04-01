@@ -2,15 +2,13 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
-import static java.lang.Math.pow;
-
 class MatrixErrorMeasurementTest {
     // alpha, beta – минимальное и максимальное собственные значения (спектр матрицы).
     // sign_law – закон распределения знаков. -1 - отрицательные 0 - чередование
     // lambda_law – закон распределения собственных значений. 1 - sqrt 2 - sin
     // variant – вариант структуры матрицы. 0 - симметричная матрица  1 - матрица простой структуры 2 - одна жорданова клетка 2x2 при минимальном с.з.
     // schema – схема генерации.
-    public int N = 20;
+    public int N = 100;
     private double constAlpha = 5.;
     private double constBeta  = 20;
     private int sign_law = 1;

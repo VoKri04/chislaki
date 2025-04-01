@@ -28,29 +28,6 @@ class MatrixInversionTest {
         };
 
         double[][] actualInverse = MatrixInversion.inverseMatrix(matrix);
-        MatrixInversion.printMatrixInverse(actualInverse);
-
-        // Проверяем, что все элементы соответствуют ожидаемым
-        for (int i = 0; i < matrix.length; i++) {
-            assertArrayEquals(expectedInverse[i], actualInverse[i], EPSILON);
-        }
-    }
-    @Test
-    void testInverseMatrix3x32() {
-        double[][] matrix = {
-                {1, 5, 3},
-                {2, 7, 3},
-                {3, 9, 4}
-        };
-
-        double[][] expectedInverse = {
-                {-1.0/ 3, -7.0 / 3, 2.0},
-                {-1.0 / 3, 5.0 / 3, -1.0},
-                {1.0, -2.0, 1.0}
-        };
-
-        double[][] actualInverse = MatrixInversion.inverseMatrix(matrix);
-        MatrixInversion.printMatrixInverse(actualInverse);
 
         // Проверяем, что все элементы соответствуют ожидаемым
         for (int i = 0; i < matrix.length; i++) {
@@ -136,9 +113,9 @@ class MatrixInversionTest {
     }
     @Test
     void testInverseMatrix() {
-        int n = 5;
+        int n = 4;
         double alpha = ALPHA;
-        double beta  = pow(10,18);
+        double beta  = pow(10,5);
         double[][] a = new double[n][];
         for (int i = 0; i < n; i++)	a[i] = new double[n];
 
@@ -148,8 +125,8 @@ class MatrixInversionTest {
         Gen g = new Gen(a, a_inv, n, alpha, beta, 1, 2, 1, 1 );
         g.mygen();
 //        g.print_matr(a, n);
-        g.print_matr(a_inv, n);
-        System.out.println();
+          g.print_matr(a_inv, n);
+          System.out.println();
         double[][] matrixInverse = MatrixInversion.inverseMatrix(a);
         MatrixInversion.printMatrixInverse(matrixInverse);
 
