@@ -6,6 +6,32 @@ import static java.lang.Math.abs;
 
 public class MatrixInversion {
 
+    public static double[][] copyMatrix(double[][] a){
+        int n = a.length;
+        double[][] result = new double[n][n];
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                result[i][j] = a[i][j];
+            }
+        }
+        return result;
+    }
+    public static double[][] multiplySquareMatrices(double[][] a, double[][] b) {
+        int n = a.length;
+        double[][] result = new double[n][n];
+
+        for(int i = 0; i < n; i++) {
+
+            for (int j = 0; j < n; j++) {
+                result[i][j] = 0;
+                for (int k = 0; k < n; k++) {
+                    result[i][j] += a[i][k] * b[k][j];
+                }
+
+            }
+        }
+        return result;
+    }
     public static void printMatrixInverse(double[][] matrix) {
         for (double[] row : matrix) {
             for (double value : row) {
@@ -14,6 +40,29 @@ public class MatrixInversion {
             System.out.println();
         }
         System.out.println();
+    }
+    public static void rearrangeColumn(double[][] a, int[] index, boolean[] visited, int start) {
+        int current = start;
+        double[] tempColumn = new double[a.length];
+        for (int i = 0; i < a.length; i++) {
+            tempColumn[i] = a[i][current];
+        }
+
+        int next;
+        do {
+            next = index[current];
+            if (next == start) {
+                for (int i = 0; i < a.length; i++) {
+                    a[i][current] = tempColumn[i];
+                }
+                break;
+            }
+            for (int i = 0; i < a.length; i++) {
+                a[i][current] = a[i][next];
+            }
+            visited[current] = true;
+            current = next;
+        } while (!visited[next]);
     }
 
     public static double[][] inverseMatrix(double[][] a) {
@@ -36,7 +85,9 @@ public class MatrixInversion {
                     maxRow = i;
                 }
             }
-            /*System.out.println("Наше maxrow: " + maxRow);*/
+/*
+            System.out.println("Наше maxrow: " + maxRow);
+*/
 
             // Перестановка текущей строки с найденной строкой в матрице
             double[] tempA = a[k];
@@ -76,7 +127,7 @@ public class MatrixInversion {
             }
             identityColumn[k] /= pivot;
 
-            /*System.out.println("После нормализации строки матрица a: ");
+           /* System.out.println("После нормализации строки матрица a: ");
             for (double[] row : a) {
                 for (double value : row) {
                     System.out.print(value + " ");
@@ -94,19 +145,19 @@ public class MatrixInversion {
                     identityColumn[i] -= factor * identityColumn[k];
                 }
             }
-            /*System.out.println("После обнуления столбца в других строках ");
+           /* System.out.println("После обнуления столбца в других строках ");
             for (double[] row : a) {
                 for (double value : row) {
                     System.out.print(value + " ");
                 }
                 System.out.println();
             }
-            System.out.println();*/
-
+            System.out.println();
+*/
             for(int i = 0; i < n; i++){
                 a[i][k] = identityColumn[i];
             }
-           /* System.out.println("После замены столбца в матрице: ");
+            /*System.out.println("После замены столбца в матрице: ");
             for (double[] row : a) {
                 for (double value : row) {
                     System.out.print(value + " ");
@@ -116,39 +167,79 @@ public class MatrixInversion {
             System.out.println();*/
         }
 
+
         // ******************************************
         //переставить столбцы
-        boolean[] visited = new boolean[n]; // Отмечает, какие столбцы уже на месте
+        boolean[] visited = new boolean[n];
+        if(n%2 == 0){
+            for (int start = 0; start < n; start++) {
+                if (visited[start]) continue; // Если столбец уже обработан, пропускаем
 
-        for (int start = 0; start < n; start++) {
-            if (visited[start]) continue; // Если столбец уже обработан, пропускаем
-
-            int current = start;
-            double[] tempColumn = new double[n];
-            //  2 0 1
-            // Запоминаем исходный столбец, который будем перемещать
-            for (int i = 0; i < n; i++) {
-                tempColumn[i] = a[i][current];
-            }
-
-            while (!visited[current]) {
-                int next = index[current]; // Узнаем, куда должен переместиться текущий столбец
-                visited[current] = true;   // Отмечаем, что мы его уже переместили
-
-                if (next == start) {
-                    for (int i = 0; i < n; i++) {
-                        a[i][current] = tempColumn[i];
-                    }
-                    break;
-                }
-
-                // Копируем столбец next в current
+                int current = start;
+                double[] tempColumn = new double[n];
+                //  2 0 1
+                // Запоминаем исходный столбец, который будем перемещать
                 for (int i = 0; i < n; i++) {
-                    a[i][current] = a[i][next];
+                    tempColumn[i] = a[i][current];
                 }
-                current = next;
+
+                while (!visited[current]) {
+                    int next = index[current]; // Узнаем, куда должен переместиться текущий столбец
+                    visited[current] = true;   // Отмечаем, что мы его уже переместили
+
+                    if (next == start) {
+                        for (int i = 0; i < n; i++) {
+                            a[i][current] = tempColumn[i];
+                        }
+                        break;
+                    }
+
+                    // Копируем столбец next в current
+                    for (int i = 0; i < n; i++) {
+                        a[i][current] = a[i][next];
+                    }
+                    current = next;
+                }
+            }
+        }else{
+            for (int start = 0; start < n; start++) {
+                if (visited[start]) {
+                    continue; // Пропускаем уже обработанные столбцы
+                }
+
+                // Начинаем новый цикл перестановки
+                int current = start;
+                double[] tempColumn = new double[n];
+
+                // Сохраняем исходный столбец
+                for (int i = 0; i < n; i++) {
+                    tempColumn[i] = a[i][current];
+                }
+
+                // Перемещаем столбцы по циклу
+                int next;
+                do {
+                    next = index[current];
+                    if (next == start) {
+                        // Если цикл замкнулся, вставляем tempColumn
+                        for (int i = 0; i < n; i++) {
+                            a[i][current] = tempColumn[i];
+                        }
+                        break;
+                    }
+                    // Копируем столбец `next` в `current`
+                    for (int i = 0; i < n; i++) {
+                        a[i][current] = a[i][next];
+                    }
+                    visited[current] = true;
+                    current = next;
+                } while (true);
             }
         }
+
+
+
+        // Вспомогательный метод
         // ******************************************
 
 
@@ -158,4 +249,3 @@ public class MatrixInversion {
     }
 
 }
-

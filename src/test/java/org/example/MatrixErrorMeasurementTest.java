@@ -8,7 +8,7 @@ class MatrixErrorMeasurementTest {
     // lambda_law – закон распределения собственных значений. 1 - sqrt 2 - sin
     // variant – вариант структуры матрицы. 0 - симметричная матрица  1 - матрица простой структуры 2 - одна жорданова клетка 2x2 при минимальном с.з.
     // schema – схема генерации.
-    public int N = 100;
+    public int N = 25;
     private double constAlpha = 5.;
     private double constBeta  = 20;
     private int sign_law = 1;
@@ -35,14 +35,15 @@ class MatrixErrorMeasurementTest {
 
                 double[][] c = new double[n][];
                 for (int j = 0; j < n; j++)	c[j] = new double[n];
-
+                double[][] G = new double[n][];
                 Gen g = new Gen(a, a_inv, n, alpha, beta, sign_law, lambda_law, variant, schema );
                 g.mygen();
+                double[][] a1 = MatrixInversion.copyMatrix(a);
                 matrixErrorMeasurement[i] = new MatrixErrorMeasurement();
                 matrixErrorMeasurement[i].setAlpha(alpha); // alpha
                 matrixErrorMeasurement[i].setBeta(beta); // beta
                 double[][] matrixInversion = MatrixInversion.inverseMatrix(a);
-                double norm = g.matr_inf_norm(a, n);
+                double norm = g.matr_inf_norm(a1, n);
                 matrixErrorMeasurement[i].setNorm(norm); // ||A||
                 double normInverse = g.matr_inf_norm(matrixInversion, n);
                 matrixErrorMeasurement[i].setNormInverse(normInverse); //||A_inv||
@@ -51,7 +52,7 @@ class MatrixErrorMeasurementTest {
                 matrixErrorMeasurement[i].setDiffNorm(diffNorm); // ||Z||
                 matrixErrorMeasurement[i].setX(diffNorm/normInverse); //||X||
                 g.matr_mul(a_inv, matrixInversion, c, n);
-                matrixErrorMeasurement[i].setR(g.calculateR(matrixInversion)); // ||R||
+                matrixErrorMeasurement[i].setR(g.calculateR(a1, matrixInversion)); // ||R||
                 if(flag){
                     beta = beta * 10;
                 } else {

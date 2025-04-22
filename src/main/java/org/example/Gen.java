@@ -65,7 +65,7 @@ public class Gen
     }
 
 
-    public double matr_inf_norm ( double[][] a, int n){
+    public static double matr_inf_norm ( double[][] a, int n){
 
         int i,j;
         double s,norm = 0.;
@@ -80,7 +80,7 @@ public class Gen
     }
 
 
-    public void matr_mul( double[][] a,  double[][] b,  double[][] c, int n )
+    public static void matr_mul(double[][] a, double[][] b, double[][] c, int n)
     {
         int i,j,k;
 
@@ -464,20 +464,20 @@ public class Gen
         //невязка генерации
 	/*for( i = 0; i < n; i++ )
 	{
-		for( j = 0; j < n; j++ ) cout << " " << r[i][j];
-		cout << endl;
+		for( j = 0; j < n; j++ ) System.out.println(" " + r[i][j]);
+        System.out.println();
 	}
-*/
-        //norm = matr_inf_norm ( r, n );
-        //System.out.println(" ||R_gen|| = " + norm );
 
+        norm = matr_inf_norm ( r, n );
+        System.out.println(" ||R_gen|| = " + norm );
+*/
 
     }//mygen
-    public double calculateR(double[][] matrixInverse){
+    public double calculateR(double[][] a1, double[][] matrixInverse){
         double[][] r = new double [n][];
         for( int i = 0; i < n; i++ )
             r[i] = new double [n];
-        matr_mul ( a, matrixInverse, r, n );
+        matr_mul (a1, matrixInverse, r, n );
         for( int i = 0; i < n; i++ ) r[i][i] -= 1.;
         double norm = matr_inf_norm ( r, n );
         return norm;

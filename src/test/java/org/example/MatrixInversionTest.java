@@ -113,7 +113,7 @@ class MatrixInversionTest {
     }
     @Test
     void testInverseMatrix() {
-        int n = 4;
+        int n = 5;
         double alpha = ALPHA;
         double beta  = pow(10,5);
         double[][] a = new double[n][];
@@ -124,15 +124,37 @@ class MatrixInversionTest {
 
         Gen g = new Gen(a, a_inv, n, alpha, beta, 1, 2, 1, 1 );
         g.mygen();
-//        g.print_matr(a, n);
+        //g.print_matr(a, n);
           g.print_matr(a_inv, n);
           System.out.println();
         double[][] matrixInverse = MatrixInversion.inverseMatrix(a);
         MatrixInversion.printMatrixInverse(matrixInverse);
 
     }
+
     @Test
-    void testInverseMatrix6() {
-        System.out.println(pow(10, 200));
+    void testInverseMatrix5() {
+        int n = 3;
+        double alpha = ALPHA;
+        double beta  = BETA;
+        double[][] a = new double[n][];
+        for (int i = 0; i < n; i++)	a[i] = new double[n];
+
+        double[][] a_inv = new double[n][];
+        for (int i = 0; i < n; i++)	a_inv[i] = new double[n];
+
+        Gen g = new Gen(a, a_inv, n, alpha, beta, 1, 2, 1, 1 );
+        g.mygen();
+        g.print_matr(a, n);
+        g.print_matr(a_inv, n);
+        System.out.println();
+        double[][] matrixInverse = MatrixInversion.inverseMatrix(a);
+        MatrixInversion.printMatrixInverse(matrixInverse);
+        double[][] r = new double[n][];
+        for (int i = 0; i < n; i++)	r[i] = new double[n];
+        Gen.matr_mul (a, matrixInverse, r, n);
+        MatrixInversion.printMatrixInverse(r);
+        MatrixInversion.printMatrixInverse(MatrixInversion.multiplySquareMatrices(a, matrixInverse));
+
     }
 }
